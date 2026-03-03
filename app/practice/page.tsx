@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function Practice() {
   const [selected, setSelected] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [startTime] = useState<number>(Date.now());
 
   const question = {
     text: "What is the derivative of sin(x)?",
@@ -12,16 +13,21 @@ export default function Practice() {
     correct: "cos(x)",
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-  };
+const handleSubmit = () => {
+  const endTime = Date.now();
+  const timeTaken = (endTime - startTime) / 1000;
+
+  console.log("Time Taken:", timeTaken, "seconds");
+
+  setSubmitted(true);
+};
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6 p-6">
-      <h1 className="text-3xl font-bold">Practice Mode 🎯</h1>
+      <h1 className="text-3xl font-bold text-white">Practice Mode 🎯</h1>
 
       <div className="max-w-xl w-full bg-white shadow-lg rounded-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">
+        <h2 className="text-lg font-semibold mb-4 text-black">
           {question.text}
         </h2>
 
@@ -30,10 +36,10 @@ export default function Practice() {
             <button
               key={option}
               onClick={() => setSelected(option)}
-              className={`p-3 rounded border ${
+              className={`p-3 rounded border front medium ${
                 selected === option
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100"
+                  : "bg-gray-100 text-black"
               }`}
             >
               {option}
@@ -42,19 +48,23 @@ export default function Practice() {
         </div>
 
         <button
-          onClick={handleSubmit}
-          className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
+            onClick={handleSubmit}
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
         >
-          Submit
+        Submit
         </button>
 
         {submitted && (
-          <p className="mt-4 font-semibold">
-            {selected === question.correct
-              ? "✅ Correct!"
-              : "❌ Wrong!"}
-          </p>
-        )}
+             <p
+                className={`mt-4 font-semibold ${
+                 selected === question.correct
+                    ? "text-green-600"
+                    : "text-red-600"
+             }`}
+            >
+                {selected === question.correct ? "✅ Correct!" : "❌ Wrong!"}
+             </p>
+            )}
       </div>
     </main>
   );
